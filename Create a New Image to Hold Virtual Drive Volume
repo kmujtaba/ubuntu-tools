@@ -1,0 +1,36 @@
+-------------- creating a VHD volume of size 1GB image------------------
+ $ sudo dd if=/dev/zero of=VHD.img bs=1M count=1200
+ {  if=/dev/zero: input file to provide a character stream for initializing data storage
+    of=VHD.img: image file to be created as storage volume
+    bs=1M: read and write up to 1M at a time
+    count=1200: copy only 1200M (1GB) input blocks  }
+    
+Next, we need to format the EXT4 file system type in the VHD image file with the mkfs utility. 
+Answer y, when prompted that /media/VHD.img is not a block special device
+
+$ sudo mkfs -t ext4 /media/VHD.img
+
+In order to access the VHD volume, we need to mount to a directory (mount point). Run these commands to create the mount 
+point and mount the VHD volume, respectively. 
+The -o is used to specify options for mounting, here, 
+the option loop indicates the device node under the /dev/ directory.
+
+$ sudo mkdir /mnt/VHD/
+$ sudo mount -t auto -o loop /media/VHD.img /mnt/VHD/
+
+Note: The VHD filesystem will only remain mounted until the next reboot, 
+to mount it at system boot, add this entry in the /etc/fstab file.
+
+/media/VHD.img  /mnt/VHD/  ext4    defaults        0  0
+
+Now verify the newly created VHD filesystem with mount point using the following df command.
+$ df -hT
+
+---------------Removing Virtual Drive Volume---------------
+
+If you don’t need the VHD volume anymore, run the following commands to unmount the VHD filesystem, 
+then delete the image file:
+$ sudo umount /mnt/VHD/
+$ sudo rm /media/VHD.img
+
+{{Using the same idea, you can also create a swap area/space using a file in Linux.}}
