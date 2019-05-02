@@ -1,0 +1,28 @@
+Clone Linux Partition
+First list the these partitions using the fdisk command as shown.
+$ fdisk -l /dev/sdb1/ /dev/sdc1
+
+Now clone a partition /dev/sdb1/ to /dev/sdc1 using the following dd command.
+$ dd if=/dev/sdb1  of=/dev/sdc1
+
+check both partitions
+$ fdisk -l /dev/sdb1 /dev/sdc1
+
+ Clone Linux Hard Drive
+ {Cloning a Linux hard drive is 
+ similar to cloning a partition.
+ However, instead of specifying the partition,
+ you just use the entire drive.
+ Note that in this case it is recommended that the hard drive is same in size 
+ (or bigger) than the source drive.}
+ 
+ $dd if=/dev/sdb of=/dev/sdc
+ 
+ {This should have copied the drive /dev/sdb with its partitions on 
+ the target hard drive /dev/sdc.
+ You can verify the changes by 
+ listing both drives with fdisk command.}
+ $ fdisk -l /dev/sdb /dev/sdc
+ 
+  Backup MBR
+  $ dd if=/dev/sda of=/backup/mbr.img bs=512 count=1.
